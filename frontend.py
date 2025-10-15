@@ -16,12 +16,28 @@ st.title("Классификация текста")
 
 text = st.text_area("Введите текст для классификации:")
 
-if st.button("Классифицировать"):
+if st.button("Классифицировать (tf-idf+logreg)"):
     if text.strip():
         logging.info(f"Получен текст для классификации: {text}")
         # Отправка POST запроса к FastAPI серверу
         logging.info("Отправка запроса на сервер...")
         response = requests.post(f"{BACKEND_URL}/predict/", json={"text": text})
+        if response.ok:
+            logging.info("Получен ответ от сервера")
+            result = response.json()
+            st.success(f"Класс: {result['predicted_class']}")
+        else:
+            logging.error(f"Ошибка при обращении к серверу: {response.status_code}")
+            st.error("Ошибка при обращении к серверу.")
+    else:
+        st.warning("Пожалуйста, введите текст.")
+
+if st.button("Классифицировать (fine-tuned BERT)"):
+    if text.strip():
+        logging.info(f"Получен текст для классификации: {text}")
+        # Отправка POST запроса к FastAPI серверу
+        logging.info("Отправка запроса на сервер...")
+        response = requests.post(f"{BACKEND_URL}/predict_NN/", json={"text": text})
         if response.ok:
             logging.info("Получен ответ от сервера")
             result = response.json()

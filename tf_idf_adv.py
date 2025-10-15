@@ -9,21 +9,18 @@ from sklearn.model_selection import GridSearchCV
 from sklearn.pipeline import Pipeline
 
 # Read data
-X_train_df = pd.read_csv('./data/output/X_train.csv', index_col=0)
-X_test_df = pd.read_csv('./data/output/X_test.csv', index_col=0)
-y_train_sr = pd.read_csv('./data/output/y_train.csv', index_col=0)['label']
-y_test_sr = pd.read_csv('./data/output/y_test.csv', index_col=0)['label']
+X_train_df = pd.read_csv("./data/output/X_train.csv", index_col=0)
+X_test_df = pd.read_csv("./data/output/X_test.csv", index_col=0)
+y_train_sr = pd.read_csv("./data/output/y_train.csv", index_col=0)["label"]
+y_test_sr = pd.read_csv("./data/output/y_test.csv", index_col=0)["label"]
 
 # Extract text series (ensure string dtype)
-X_train_text = X_train_df['text'].astype(str)
-X_test_text = X_test_df['text'].astype(str)
+X_train_text = X_train_df["text"].astype(str)
+X_test_text = X_test_df["text"].astype(str)
 
 
 pipeline = Pipeline(
-    [
-        ('tfidf', TfidfVectorizer()),
-        ('clf', LogisticRegression(max_iter=1000))
-    ]
+    [("tfidf", TfidfVectorizer()), ("clf", LogisticRegression(max_iter=1000))]
 )
 param_grid = {
     "tfidf__ngram_range": [(1, 1), (1, 2)],
